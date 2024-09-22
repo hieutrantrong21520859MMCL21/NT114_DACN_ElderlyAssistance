@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import RegistrationScreen from './screens/RegistrationScreen';
 import LoginScreen from './screens/LoginScreen';
+import SplashScreen from './screens/SplashScreen';
 
 
 export default function App() {
@@ -16,8 +17,9 @@ export default function App() {
 
     <NavigationContainer>
 
-      <Stack.Navigator initialRouteName='Login' screenOptions={{headerShown: false}}>
-
+      <Stack.Navigator initialRouteName='Splash' screenOptions={{headerShown: false}}>
+        
+        <Stack.Screen name='Splash' component={SplashScreen}/>
         <Stack.Screen name='Registration' component={RegistrationScreen}/>
         <Stack.Screen name='Login' component={LoginScreen}/>
 
