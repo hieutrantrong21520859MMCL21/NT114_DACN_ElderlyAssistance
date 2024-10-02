@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     header_background_logo: {
         width: '75%',
         height: '75%',
-
         alignSelf: 'center'
     },
 
