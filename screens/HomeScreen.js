@@ -24,6 +24,11 @@ export default function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('Login')}
                         color="#0096FF"
                     />
+                    <Button
+                        title="Change Password"
+                        onPress={() => navigation.navigate('ChangePassword')}
+                        color="#0096FF"
+                    />
                 </View>
             </ImageBackground>
         </View>

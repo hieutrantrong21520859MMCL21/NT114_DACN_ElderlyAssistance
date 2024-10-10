@@ -8,6 +8,7 @@ import RegistrationScreen from './screens/RegistrationScreen';
 import LoginScreen from './screens/LoginScreen';
 import SplashScreen from './screens/SplashScreen';
 import HomeScreen from './screens/HomeScreen';
+import ForgotScreen from './screens/ForgotScreen';
 
 
 export default function App() {
@@ -24,6 +25,8 @@ export default function App() {
         <Stack.Screen name='Registration' component={RegistrationScreen}/>
         <Stack.Screen name='Login' component={LoginScreen}/>
         <Stack.Screen name='Home' component={HomeScreen}/>
+        <Stack.Screen name='ChangePassword' component={ForgotScreen}/>
+
 
       </Stack.Navigator>
 

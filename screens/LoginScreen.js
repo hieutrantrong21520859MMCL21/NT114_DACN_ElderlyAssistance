@@ -80,7 +80,11 @@ export default function LoginScreen({ navigation }) {
                         }
                     />
 
-                    <Text style={styles.resetPasswordOption}>Forgot password?</Text>
+                    <Text
+                        style={styles.resetPasswordOption}
+                        onPress={() => navigation.navigate('ChangePassword')}
+                    >Change Password</Text>
+
 
                     <Button
                         style={styles.form_btnLogin}
