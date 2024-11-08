@@ -1,7 +1,7 @@
 ﻿import React, { useState } from "react";
-import { Text, TextInput, Button } from '@react-native-material/core';
+import { Text, TextInput } from '@react-native-material/core';
 import { Alert } from 'react-native';
-import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, Image, ImageBackground } from 'react-native';
+import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { auth } from "../firebase";
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 
@@ -67,6 +67,7 @@ export default function ChangePasswordScreen({ navigation }) {
                         secureTextEntry={true}
                         value={currentPassword}
                         onChangeText={setCurrentPassword}
+                        style={styles.input}
                     />
                     <TextInput
                         variant="outlined"
@@ -75,6 +76,7 @@ export default function ChangePasswordScreen({ navigation }) {
                         secureTextEntry={true}
                         value={newPassword}
                         onChangeText={setNewPassword}
+                        style={styles.input}
                     />
                     <TextInput
                         variant="outlined"
@@ -83,13 +85,16 @@ export default function ChangePasswordScreen({ navigation }) {
                         secureTextEntry={true}
                         value={confirmNewPassword}
                         onChangeText={setConfirmNewPassword}
+                        style={styles.input}
                     />
 
-                    <Button
-                        style={styles.form_btnChangePassword}
-                        title="Change Password"
+                    {/* Custom Change Password Button using TouchableOpacity */}
+                    <TouchableOpacity
+                        style={[styles.form_btn, styles.form_btnChangePassword]}
                         onPress={handleChangePassword}
-                    />
+                    >
+                        <Text style={styles.form_btnText}>Change Password</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -117,7 +122,6 @@ const styles = StyleSheet.create({
         rowGap: 16,
     },
     header_title: {
-        fontFamily: 'Sofadi One',
         fontWeight: '700',
         color: 'white',
         textTransform: 'uppercase',
@@ -130,9 +134,24 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         rowGap: 16,
     },
-    form_btnChangePassword: {
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        backgroundColor: '#0096FF',
+    input: {
+        width: '100%',
+        marginBottom: 16,
     },
+    form_btn: {
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    form_btnChangePassword: {
+        backgroundColor: '#0096FF',
+        marginTop: 16,
+    },
+    form_btnText: {
+        fontSize: 24,
+        color: '#fff',
+        fontWeight: 'bold',
+    }
 });

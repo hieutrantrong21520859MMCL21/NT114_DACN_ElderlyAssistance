@@ -1,11 +1,9 @@
-// RegistrationScreen.js
-
 import React, { useState } from "react";
-import { TextInput, Text, Button } from "@react-native-material/core";
-import { ScrollView, KeyboardAvoidingView, View, StyleSheet, Image, ImageBackground, Platform, Alert } from "react-native";
+import { TextInput, Text } from "@react-native-material/core";
+import { ScrollView, KeyboardAvoidingView, View, StyleSheet, Image, ImageBackground, Platform, Alert, TouchableOpacity } from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { createUserWithEmailAndPassword } from "firebase/auth"; // Import Firebase auth
-import { auth } from "../firebase"; // Import Firebase config với 'auth'
+import { auth } from "../firebase"; // Import Firebase config
 
 export default function RegistrationScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -70,6 +68,7 @@ export default function RegistrationScreen({ navigation }) {
             placeholder="abc123@gmail.com"
             onChangeText={string => setEmail(string)}
             value={email}
+            style={styles.input}
           />
 
           <TextInput
@@ -79,6 +78,7 @@ export default function RegistrationScreen({ navigation }) {
             secureTextEntry={isPasswordSecure}
             value={password}
             onChangeText={string => setPassword(string)}
+            style={styles.input}
             trailing={() => (
               <Icon name={iconPassword} size={24} onPress={checkIsPasswordSecure} />
             )}
@@ -91,6 +91,7 @@ export default function RegistrationScreen({ navigation }) {
             secureTextEntry={isConfirmPasswordSecure}
             value={confirmPassword}
             onChangeText={handleConfirmPasswordChange}
+            style={styles.input}
             trailing={() => (
               <Icon name={iconConfirmPassword} size={24} onPress={checkIsConfirmPasswordSecure} />
             )}
@@ -100,29 +101,32 @@ export default function RegistrationScreen({ navigation }) {
             <Text style={styles.errorText}>Passwords do not match</Text>
           )}
 
-          <Button
-            style={styles.form_btnRegister}
-            title="Create Account"
-            titleStyle={{ fontSize: 24 }}
+          {/* Custom Register Button using TouchableOpacity */}
+          <TouchableOpacity
+            style={[styles.form_btn, styles.form_btnRegister]}
             onPress={handleRegister}
             disabled={!passwordsMatch}
-          />
+          >
+            <Text style={styles.form_btnText}>Create Account</Text>
+          </TouchableOpacity>
 
           <View style={styles.lineBreak}>
             <Text>OR</Text>
           </View>
 
-          <Button
-            style={styles.form_btnLogin}
-            title="Sign In"
-            titleStyle={{ fontSize: 24 }}
+          {/* Custom Login Button using TouchableOpacity */}
+          <TouchableOpacity
+            style={[styles.form_btn, styles.form_btnLogin]}
             onPress={() => navigation.navigate('Login')}
-          />
+          >
+            <Text style={styles.form_btnText}>Sign In</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   container: { 
     flex: 1,
@@ -144,7 +148,6 @@ const styles = StyleSheet.create({
     rowGap: 32,
   },
   header_title: {
-    fontFamily: 'Sofadi One',
     fontWeight: '700',
     color: 'white',
     textTransform: 'uppercase',
@@ -157,10 +160,29 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     rowGap: 16,
   },
+  input: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  form_btn: {
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   form_btnRegister: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
     backgroundColor: '#0096FF',
+    marginTop: 16,
+  },
+  form_btnLogin: {
+    backgroundColor: '#0096FF',
+    marginTop: 8,
+  },
+  form_btnText: {
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: 'bold',
   },
   lineBreak: {
     width: 180,
@@ -171,16 +193,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  form_btnLogin: {
-    width: '80%',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: '#0096FF',
-    alignSelf: 'center',
-  },
   errorText: {
     color: 'red',
     marginTop: 8,
   },
 });
-

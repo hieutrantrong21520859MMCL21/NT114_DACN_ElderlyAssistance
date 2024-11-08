@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Text, TextInput, Button } from '@react-native-material/core';
-import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, Image, ImageBackground, Alert } from 'react-native';
+import { Text, TextInput } from '@react-native-material/core';
+import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, Image, ImageBackground, Alert, TouchableOpacity } from 'react-native';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase auth function
 import { auth } from "../firebase"; // Import Firebase config
@@ -27,7 +27,7 @@ export default function LoginScreen({ navigation }) {
             .then((userCredential) => {
                 const user = userCredential.user;
                 Alert.alert("Login successful", `Welcome back, ${user.email}!`);
-                navigation.navigate('Home'); // Điều hướng người dùng tới màn hình Home sau khi đăng nhập thành công
+                navigation.navigate('Home'); 
             })
             .catch((error) => {
                 Alert.alert("Login failed", error.message);
@@ -62,6 +62,7 @@ export default function LoginScreen({ navigation }) {
                         placeholder="abc123@gmail.com"
                         onChangeText={string => setEmail(string)}
                         value={email}
+                        style={styles.input}
                     />
 
                     <TextInput
@@ -71,6 +72,7 @@ export default function LoginScreen({ navigation }) {
                         secureTextEntry={isPasswordSecure}
                         value={password}
                         onChangeText={string => setPassword(string)}
+                        style={styles.input}
                         trailing={() =>
                             <Icon
                                 name={iconPassword}
@@ -85,13 +87,13 @@ export default function LoginScreen({ navigation }) {
                         onPress={() => navigation.navigate('ChangePassword')}
                     >Change Password</Text>
 
-
-                    <Button
-                        style={styles.form_btnLogin}
-                        title='log in'
-                        titleStyle={{ fontSize: 24 }}
-                        onPress={handleLogin} // Gọi hàm đăng nhập khi nhấn nút
-                    />
+                    {/* Custom Login Button using TouchableOpacity */}
+                    <TouchableOpacity
+                        style={[styles.form_btn, styles.form_btnLogin]}
+                        onPress={handleLogin}
+                    >
+                        <Text style={styles.form_btnText}>Log in</Text>
+                    </TouchableOpacity>
 
                     <View style={styles.registrationOption}>
                         <Text style={{ color: '#A9A9A9' }}>Do not have an account?</Text>
@@ -129,7 +131,6 @@ const styles = StyleSheet.create({
         rowGap: 16
     },
     header_title: {
-        fontFamily: 'Sofadi One',
         fontWeight: '700',
         color: 'white',
         textTransform: 'uppercase'
@@ -142,8 +143,13 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         rowGap: 16,
     },
+    input: {
+        width: '100%',
+        marginBottom: 16,
+    },
     resetPasswordOption: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginTop: 8,
     },
     registrationOption: {
         fontSize: 13,
@@ -152,9 +158,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         columnGap: 8
     },
+    form_btn: {
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     form_btnLogin: {
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        backgroundColor: '#0096FF'
+        backgroundColor: '#0096FF',
+        marginTop: 16,
+    },
+    form_btnText: {
+        fontSize: 24,
+        color: '#fff',
+        fontWeight: 'bold',
     }
 });
