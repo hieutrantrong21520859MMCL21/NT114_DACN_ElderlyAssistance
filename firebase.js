@@ -1,12 +1,9 @@
-﻿// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+﻿import { initializeApp } from "firebase/app";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBTcxUnxJOi_fuuu6UjyYnZnGuDDgEu-qk",
   authDomain: "elderassistance-fe406.firebaseapp.com",
@@ -19,6 +16,15 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
-export const auth = getAuth(app);
+// Check if Firebase Analytics is supported in the current environment
+const analytics = isSupported() ? getAnalytics(app) : null;
+
+// Initialize Firebase Auth with AsyncStorage persistence
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
+
+export { auth, analytics };
