@@ -17,6 +17,13 @@ const featuresData = [
       { id: '4', name: 'Music', icon: '🎶' },
     ],
   },
+  {
+    title: 'OneClick',
+    data: [
+      { id: '5', name: 'Chatbot', icon: '💬' },
+      { id: '6', name: 'Support', icon: '🆘' },
+    ],
+  },
 ];
 
 export default function HomeScreen({ navigation }) {
@@ -35,6 +42,12 @@ export default function HomeScreen({ navigation }) {
         case 'Music':
           alert('Music screen not implemented yet');
           break;
+        case 'Chatbot':
+          alert('Music screen not implemented yet');
+            break;
+        case 'Support':
+          alert('Music screen not implemented yet');
+            break;
         default:
           alert(`Navigating to ${item.name}`);
       }
