@@ -34,7 +34,7 @@ export default function HomeScreen({ navigation }) {
           navigation.navigate('ScheduleMedicine');
           break;
         case 'Exercise':
-          alert('Exercise screen not implemented yet');
+          navigation.navigate('Exercise');
           break;
         case 'News':
           alert('News screen not implemented yet');
