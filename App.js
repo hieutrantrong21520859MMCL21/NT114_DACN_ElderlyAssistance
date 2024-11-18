@@ -12,13 +12,15 @@ import ForgotScreen from './screens/ForgotScreen';
 import HomeScreen from './screens/HomeScreen';
 import ScheduleMedicineScreen from './screens/ScheduleMedicineScreen';
 import AddMedicineScreen from './screens/AddMedicineScreen';
+import ExerciseScreen from './screens/ExerciseScreen';
+import ExerciseDetailScreen from './screens/ExerciseDetailScreen';
 
 export default function App() {
   const Stack = createStackNavigator();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Splash' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Splash' component={SplashScreen} />
         <Stack.Screen name='Registration' component={RegistrationScreen} />
         <Stack.Screen name='Login' component={LoginScreen} />
@@ -27,6 +29,8 @@ export default function App() {
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name= 'ScheduleMedicine' component={ScheduleMedicineScreen}/>
         <Stack.Screen name= 'AddMedicine' component={AddMedicineScreen}/>
+        <Stack.Screen name= 'Exercise' component={ExerciseScreen}/>
+        <Stack.Screen name= 'ExerciseDetail' component={ExerciseDetailScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
