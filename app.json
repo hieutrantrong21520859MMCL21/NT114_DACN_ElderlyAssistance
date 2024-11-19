@@ -20,6 +20,11 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "notifications": {
+      "icon": "./assets/notification-icon.png",
+      "androidMode": "default",
+      "androidCollapsedTitle": "You have a new notification!"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     },
@@ -28,5 +33,6 @@
         "expo-font"
       ]
     ]
+    
   }
 }

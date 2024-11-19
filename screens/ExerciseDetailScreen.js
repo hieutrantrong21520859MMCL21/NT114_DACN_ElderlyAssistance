@@ -29,7 +29,7 @@ export default function ExerciseDetailScreen({ route, navigation }) {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Tiêu đề và nút back */}
+      {}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#007AFF" />
@@ -53,7 +53,7 @@ export default function ExerciseDetailScreen({ route, navigation }) {
         scrollEnabled={false} 
       />
 
-      {/* Nút mở video nếu có liên kết */}
+      {}
       {exercise.videoLink && (
         <TouchableOpacity
           style={styles.videoButton}
