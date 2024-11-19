@@ -1,9 +1,10 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ScheduleMedicineScreen() {
   const [medicines, setMedicines] = useState({});
@@ -13,6 +14,33 @@ export default function ScheduleMedicineScreen() {
 
   const navigation = useNavigation();
   const route = useRoute();
+
+  useEffect(() => {
+    // Load saved medicines from AsyncStorage
+    const loadMedicines = async () => {
+      try {
+        const storedMedicines = await AsyncStorage.getItem('medicines');
+        if (storedMedicines) {
+          setMedicines(JSON.parse(storedMedicines));
+        }
+      } catch (error) {
+        console.error('Failed to load medicines:', error);
+      }
+    };
+    loadMedicines();
+  }, []);
+
+  useEffect(() => {
+    // Save medicines to AsyncStorage when medicines state changes
+    const saveMedicines = async () => {
+      try {
+        await AsyncStorage.setItem('medicines', JSON.stringify(medicines));
+      } catch (error) {
+        console.error('Failed to save medicines:', error);
+      }
+    };
+    saveMedicines();
+  }, [medicines]);
 
   useEffect(() => {
     if (route.params?.newMedicine) {
@@ -105,6 +133,7 @@ export default function ScheduleMedicineScreen() {
     <View style={styles.medicineContainer}>
       <Text style={styles.medicineText}>{item.name}</Text>
       <Text style={styles.medicineSubText}>{item.dosage}</Text>
+      <Text style={styles.medicineTimeText}>Time: {new Date(item.time).toLocaleTimeString()}</Text>
       <View style={styles.editDeleteContainer}>
         <TouchableOpacity onPress={() => handleEditMedicine(item)}>
           <Text style={styles.editButton}>Edit</Text>
@@ -119,17 +148,39 @@ export default function ScheduleMedicineScreen() {
   const renderSection = (timeOfDay) => {
     const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
     const medicinesForTimeOfDay = medicines[selectedDateStr]?.[timeOfDay] || [];
-  
+
+    let iconName;
+    switch (timeOfDay) {
+      case 'Morning':
+        iconName = 'sunny-outline';
+        break;
+      case 'Afternoon':
+        iconName = 'partly-sunny-outline';
+        break;
+      case 'Evening':
+        iconName = 'moon-outline';
+        break;
+      default:
+        iconName = 'time-outline';
+    }
+
     return (
       <View style={styles.sectionContainer}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>{timeOfDay}</Text>
+          <View style={styles.sectionTitleContainer}>
+            <Ionicons name={iconName} size={24} color="#1D8CF8" style={styles.sectionIcon} />
+            <Text style={styles.sectionTitle}>{timeOfDay}</Text>
+          </View>
           <TouchableOpacity onPress={() => navigation.navigate('AddMedicine', { timeOfDay })}>
             <Text style={styles.addButton}>+</Text>
           </TouchableOpacity>
         </View>
         {medicinesForTimeOfDay.length > 0 ? (
-          medicinesForTimeOfDay.map((item) => renderMedicine({ item })) // Map over the medicines and render them manually
+          <FlatList
+            data={medicinesForTimeOfDay}
+            renderItem={renderMedicine}
+            keyExtractor={(item) => item.id}
+          />
         ) : (
           <Text style={styles.placeholder}>No medicines scheduled for {timeOfDay.toLowerCase()}.</Text>
         )}
@@ -146,29 +197,36 @@ export default function ScheduleMedicineScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#007AFF" />
-        </TouchableOpacity>
-        <View style={styles.datePickerContainer}>
-          <TouchableOpacity onPress={showDatePicker} style={styles.dateButton}>
-            <Text style={styles.dateText}>{format(selectedDate, 'MMMM dd, yyyy')}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+    <FlatList
+      style={styles.container}
+      ListHeaderComponent={
+        <>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={24} color="#007AFF" />
+            </TouchableOpacity>
+            <View style={styles.datePickerContainer}>
+              <TouchableOpacity onPress={showDatePicker} style={styles.dateButton}>
+                <Text style={styles.dateText}>{format(selectedDate, 'MMMM dd, yyyy')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
 
-      {renderSection('Morning')}
-      {renderSection('Afternoon')}
-      {renderSection('Evening')}
-    </ScrollView>
+          {renderSection('Morning')}
+          {renderSection('Afternoon')}
+          {renderSection('Evening')}
+        </>
+      }
+      data={[]}
+      renderItem={() => null} // Empty render function to prevent the flatlist from rendering its own items
+    />
   );
 }
 
@@ -261,5 +319,12 @@ const styles = StyleSheet.create({
   deleteButton: {
     fontSize: 16,
     color: '#F44336',
+  },
+  sectionTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  sectionIcon: {
+    marginRight: 10, 
   },
 });

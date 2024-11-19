@@ -45,7 +45,7 @@ export default function ExerciseScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Tiêu đề với nút back */}
+      
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#007AFF" />
@@ -53,12 +53,12 @@ export default function ExerciseScreen({ navigation }) {
         <Text style={styles.title}>Exercise List</Text>
       </View>
 
-      {/* Danh sách bài tập */}
+      
       <FlatList
         data={exercises}
         renderItem={renderExerciseItem}
         keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={<Text style={styles.listHeader}></Text>} // Có thể thêm nội dung ở đây nếu cần
+        ListHeaderComponent={<Text style={styles.listHeader}></Text>} 
       />
     </View>
   );
