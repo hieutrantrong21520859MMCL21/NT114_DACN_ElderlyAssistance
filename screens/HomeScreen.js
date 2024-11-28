@@ -1,27 +1,30 @@
 ﻿import React from 'react';
 import { View, Text, StyleSheet, SectionList } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
 
 const featuresData = [
   {
     title: 'Medical',
     data: [
-      { id: '1', name: 'Schedule Medicine', icon: '💊' },
-      { id: '2', name: 'Exercise', icon: '🏋️' },
+      { id: '1', name: 'Schedule Medicine', icon: 'medkit' },
+      { id: '2', name: 'Exercise', icon: 'fitness' },
     ],
   },
   {
     title: 'Entertainment',
     data: [
-      { id: '3', name: 'News', icon: '📰' },
-      { id: '4', name: 'Music', icon: '🎶' },
+      { id: '3', name: 'News', icon: 'newspaper' },
+      { id: '4', name: 'Music', icon: 'musical-notes' },
+      { id: '5', name: 'Audio Book', icon: 'book' },
     ],
   },
   {
     title: 'OneClick',
     data: [
-      { id: '5', name: 'Chatbot', icon: '💬' },
-      { id: '6', name: 'Support', icon: '🆘' },
+      { id: '6', name: 'Chatbot', icon: 'chatbubbles' },
+      { id: '7', name: 'Support', icon: 'help-circle' },
+      { id: '8', name: 'SOS', icon: 'alert-circle' },
     ],
   },
 ];
@@ -40,22 +43,35 @@ export default function HomeScreen({ navigation }) {
           alert('News screen not implemented yet');
           break;
         case 'Music':
-          alert('Music screen not implemented yet');
+          navigation.navigate('Music');
+          break;
+        case 'Audio Book':
+          navigation.navigate('AudioBook');
           break;
         case 'Chatbot':
-          alert('Music screen not implemented yet');
-            break;
+          alert('Chatbot screen not implemented yet');
+          break;
         case 'Support':
-          alert('Music screen not implemented yet');
-            break;
+          alert('Support screen not implemented yet');
+          break;
+        case 'SOS':
+          alert('SOS feature activated');
+          break;
         default:
           alert(`Navigating to ${item.name}`);
       }
     };
 
+    const isSOS = item.name === 'SOS';
+    const itemStyle = isSOS
+      ? [styles.featureItem, styles.sosButton]
+      : styles.featureItem;
+
+    const iconStyle = isSOS ? [styles.icon, styles.sosIcon] : styles.icon;
+
     return (
-      <TouchableOpacity style={styles.featureItem} onPress={handlePress}>
-        <Text style={styles.icon}>{item.icon}</Text>
+      <TouchableOpacity style={itemStyle} onPress={handlePress}>
+        <Ionicons name={item.icon} size={24} style={iconStyle} />
         <Text style={styles.featureName}>{item.name}</Text>
       </TouchableOpacity>
     );
@@ -101,12 +117,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   icon: {
-    fontSize: 24,
     marginRight: 15,
     color: '#1D8CF8',
   },
   featureName: {
     fontSize: 18,
     color: '#333',
+  },
+  sosButton: {
+    backgroundColor: '#FFCCCC',
+    borderColor: '#FF0000',
+    borderWidth: 1,
+  },
+  sosIcon: {
+    color: '#FF0000',
   },
 });

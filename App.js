@@ -14,6 +14,8 @@ import ScheduleMedicineScreen from './screens/ScheduleMedicineScreen';
 import AddMedicineScreen from './screens/AddMedicineScreen';
 import ExerciseScreen from './screens/ExerciseScreen';
 import ExerciseDetailScreen from './screens/ExerciseDetailScreen';
+import AudioBookScreen from './screens/AudioBookScreen';
+import MusicScreen from './screens/MusicScreen';
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -31,6 +33,8 @@ export default function App() {
         <Stack.Screen name= 'AddMedicine' component={AddMedicineScreen}/>
         <Stack.Screen name= 'Exercise' component={ExerciseScreen}/>
         <Stack.Screen name= 'ExerciseDetail' component={ExerciseDetailScreen}/>
+        <Stack.Screen name= 'AudioBook' component={AudioBookScreen}/>
+        <Stack.Screen name= 'Music' component={MusicScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
