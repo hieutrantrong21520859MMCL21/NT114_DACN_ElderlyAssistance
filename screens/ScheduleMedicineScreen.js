@@ -1,5 +1,11 @@
-﻿﻿﻿import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
+﻿import React, { useEffect, useState } from 'react';
+import {View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Alert,
+} from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
@@ -69,12 +75,20 @@ export default function ScheduleMedicineScreen() {
         ],
       },
     }));
+    console.log(
+      `Added new medicine: ${newMedicine.name}, Dosage: ${
+        newMedicine.dosage
+      }, Time: ${new Date(
+        newMedicine.time
+      ).toLocaleTimeString()} on ${selectedDateStr}`
+    );
   };
 
   const updateMedicine = (updatedMedicine, selectedDateStr) => {
     setMedicines((prevMedicines) => {
       const updatedMedicines = { ...prevMedicines };
-      const timeOfDayMedicines = updatedMedicines[selectedDateStr]?.[updatedMedicine.timeOfDay] || [];
+      const timeOfDayMedicines =
+        updatedMedicines[selectedDateStr]?.[updatedMedicine.timeOfDay] || [];
       const updatedTimeOfDayMedicines = timeOfDayMedicines.map((medicine) =>
         medicine.id === updatedMedicine.id ? updatedMedicine : medicine
       );
@@ -112,13 +126,17 @@ export default function ScheduleMedicineScreen() {
     const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
     setMedicines((prevMedicines) => {
       const updatedMedicines = { ...prevMedicines };
-      const timeOfDayMedicines = updatedMedicines[selectedDateStr]?.[medicine.timeOfDay] || [];
-      const updatedTimeOfDayMedicines = timeOfDayMedicines.filter((item) => item.id !== medicine.id);
+      const timeOfDayMedicines =
+        updatedMedicines[selectedDateStr]?.[medicine.timeOfDay] || [];
+      const updatedTimeOfDayMedicines = timeOfDayMedicines.filter(
+        (item) => item.id !== medicine.id
+      );
 
       if (updatedTimeOfDayMedicines.length === 0) {
         delete updatedMedicines[selectedDateStr][medicine.timeOfDay];
       } else {
-        updatedMedicines[selectedDateStr][medicine.timeOfDay] = updatedTimeOfDayMedicines;
+        updatedMedicines[selectedDateStr][medicine.timeOfDay] =
+          updatedTimeOfDayMedicines;
       }
 
       if (Object.keys(updatedMedicines[selectedDateStr]).length === 0) {
@@ -133,7 +151,9 @@ export default function ScheduleMedicineScreen() {
     <View style={styles.medicineContainer}>
       <Text style={styles.medicineText}>{item.name}</Text>
       <Text style={styles.medicineSubText}>{item.dosage}</Text>
-      <Text style={styles.medicineTimeText}>Time: {new Date(item.time).toLocaleTimeString()}</Text>
+      <Text style={styles.medicineTimeText}>
+        Time: {new Date(item.time).toLocaleTimeString()}
+      </Text>
       <View style={styles.editDeleteContainer}>
         <TouchableOpacity onPress={() => handleEditMedicine(item)}>
           <Text style={styles.editButton}>Edit</Text>
@@ -168,10 +188,16 @@ export default function ScheduleMedicineScreen() {
       <View style={styles.sectionContainer}>
         <View style={styles.sectionHeader}>
           <View style={styles.sectionTitleContainer}>
-            <Ionicons name={iconName} size={24} color="#1D8CF8" style={styles.sectionIcon} />
+            <Ionicons
+              name={iconName}
+              size={24}
+              color="#1D8CF8"
+              style={styles.sectionIcon}
+            />
             <Text style={styles.sectionTitle}>{timeOfDay}</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('AddMedicine', { timeOfDay })}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AddMedicine', { timeOfDay })}>
             <Text style={styles.addButton}>+</Text>
           </TouchableOpacity>
         </View>
@@ -182,7 +208,9 @@ export default function ScheduleMedicineScreen() {
             keyExtractor={(item) => item.id}
           />
         ) : (
-          <Text style={styles.placeholder}>No medicines scheduled for {timeOfDay.toLowerCase()}.</Text>
+          <Text style={styles.placeholder}>
+            No medicines scheduled for {timeOfDay.toLowerCase()}.
+          </Text>
         )}
       </View>
     );
@@ -202,12 +230,18 @@ export default function ScheduleMedicineScreen() {
       ListHeaderComponent={
         <>
           <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('HomeTabs')}
+              style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color="#007AFF" />
             </TouchableOpacity>
             <View style={styles.datePickerContainer}>
-              <TouchableOpacity onPress={showDatePicker} style={styles.dateButton}>
-                <Text style={styles.dateText}>{format(selectedDate, 'MMMM dd, yyyy')}</Text>
+              <TouchableOpacity
+                onPress={showDatePicker}
+                style={styles.dateButton}>
+                <Text style={styles.dateText}>
+                  {format(selectedDate, 'MMMM dd, yyyy')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -325,6 +359,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionIcon: {
-    marginRight: 10, 
+    marginRight: 10,
   },
 });
