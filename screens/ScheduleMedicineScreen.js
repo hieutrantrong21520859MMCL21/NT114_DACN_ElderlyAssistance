@@ -1,4 +1,4 @@
-﻿﻿import React, { useEffect, useState } from 'react';
+﻿﻿﻿import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -133,6 +133,7 @@ export default function ScheduleMedicineScreen() {
     <View style={styles.medicineContainer}>
       <Text style={styles.medicineText}>{item.name}</Text>
       <Text style={styles.medicineSubText}>{item.dosage}</Text>
+      <Text style={styles.medicineTimeText}>Time: {new Date(item.time).toLocaleTimeString()}</Text>
       <View style={styles.editDeleteContainer}>
         <TouchableOpacity onPress={() => handleEditMedicine(item)}>
           <Text style={styles.editButton}>Edit</Text>
