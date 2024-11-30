@@ -1,51 +1,36 @@
-﻿import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+﻿﻿import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons
 import { useRoute } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function AddMedicineScreen({ navigation }) {
   const route = useRoute();
   const editingMedicine = route.params?.editingMedicine;
-  const timeOfDay = route.params?.timeOfDay; // Nhận timeOfDay từ navigation params
+  const timeOfDay = route.params?.timeOfDay || 'Morning';
   const selectedDate = route.params?.selectedDate || new Date().toDateString();
 
+  // Set default values when editing a medicine
   const [name, setName] = useState(editingMedicine ? editingMedicine.name.split(' (')[0] : '');
   const [type, setType] = useState(editingMedicine ? editingMedicine.dosage.split(' ')[1] : '');
-  const [color, setColor] = useState(editingMedicine ? editingMedicine.name.match(/\(([^)]+)\)/)?.[1] || '' : '');
+  const [dose, setDose] = useState(editingMedicine ? editingMedicine.name.match(/\(([^)]+)\)/)?.[1] || '' : '');
   const [amount, setAmount] = useState(editingMedicine ? editingMedicine.dosage.split(' ')[0] : '');
-  const [time, setTime] = useState(editingMedicine ? new Date(editingMedicine.time) : new Date());
-  const [showTimePicker, setShowTimePicker] = useState(false);
-
-  const handleTimeChange = (event, selectedTime) => {
-    setShowTimePicker(false);
-    if (selectedTime) {
-      setTime(selectedTime);
-    }
-  };
 
   const handleSave = () => {
-    if (!name || !type || !color || !amount) {
-      Alert.alert('Validation Error', 'All fields must be filled before saving!');
-      return;
-    }
-
     const updatedMedicine = {
       id: editingMedicine ? editingMedicine.id : Date.now().toString(),
-      name: `${name} (${color})`,
+      name: `${name} (${dose})`,
       dosage: `${amount} ${type}`,
-      timeOfDay, // Lưu timeOfDay được truyền từ màn hình trước
+      timeOfDay: timeOfDay,
       date: selectedDate,
-      time: time.toISOString(),
     };
 
-    // Điều hướng trở lại màn hình ScheduleMedicine
     navigation.navigate('ScheduleMedicine', { newMedicine: updatedMedicine, editing: !!editingMedicine });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        {/* Back Button */}
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#1D8CF8" />
         </TouchableOpacity>
@@ -54,35 +39,51 @@ export default function AddMedicineScreen({ navigation }) {
 
       <Text style={styles.subtitle}>Fill out the fields and hit the Save Button to add it!</Text>
 
+      {/* Input for Medicine Name */}
       <View style={styles.inputContainer}>
         <Ionicons name="medkit-outline" size={24} color="#1D8CF8" style={styles.icon} />
-        <TextInput placeholder="Vitamin D" value={name} onChangeText={setName} style={styles.input} />
+        <TextInput
+          placeholder="Vitamin D"
+          value={name}
+          onChangeText={setName}
+          style={styles.input}
+        />
       </View>
 
+      {/* Input for Type */}
       <View style={styles.inputContainer}>
         <Ionicons name="flask-outline" size={24} color="#1D8CF8" style={styles.icon} />
-        <TextInput placeholder="Capsule" value={type} onChangeText={setType} style={styles.input} />
+        <TextInput
+          placeholder="Capsule"
+          value={type}
+          onChangeText={setType}
+          style={styles.input}
+        />
       </View>
 
+      {/* Input for Dose */}
       <View style={styles.inputContainer}>
-        <Ionicons name="color-palette-outline" size={24} color="#1D8CF8" style={styles.icon} />
-        <TextInput placeholder="Gold" value={color} onChangeText={setColor} style={styles.input} />
+        <Ionicons name="speedometer-outline" size={24} color="#1D8CF8" style={styles.icon} />
+        <TextInput
+          placeholder="1000mg"
+          value={dose}
+          onChangeText={setDose}
+          style={styles.input}
+        />
       </View>
 
+      {/* Input for Amount */}
       <View style={styles.inputContainer}>
         <Ionicons name="calculator-outline" size={24} color="#1D8CF8" style={styles.icon} />
-        <TextInput placeholder="1" value={amount} onChangeText={setAmount} style={styles.input} />
+        <TextInput
+          placeholder="1"
+          value={amount}
+          onChangeText={setAmount}
+          style={styles.input}
+        />
       </View>
 
-      <TouchableOpacity onPress={() => setShowTimePicker(true)} style={styles.inputContainer}>
-        <Ionicons name="time-outline" size={24} color="#1D8CF8" style={styles.icon} />
-        <Text style={styles.timeText}>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-      </TouchableOpacity>
-
-      {showTimePicker && (
-        <DateTimePicker value={time} mode="time" is24Hour={true} display="default" onChange={handleTimeChange} />
-      )}
-
+      {/* Save Button */}
       <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
         <Ionicons name="save-outline" size={24} color="#FFF" />
         <Text style={styles.saveButtonText}>Save</Text>
@@ -150,9 +151,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 10,
-  },
-  timeText: { 
-    fontSize: 16, 
-    color: '#333' 
   },
 });

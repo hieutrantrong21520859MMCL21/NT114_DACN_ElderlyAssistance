@@ -57,6 +57,7 @@ export default function HomeScreen({ navigation }) {
         case 'SOS':
           alert('SOS feature activated');
           break;
+
         default:
           alert(`Navigating to ${item.name}`);
       }
@@ -86,16 +87,17 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.sectionTitle}>{section.title}</Text>
       )}
       contentContainerStyle={styles.container}
+      ListFooterComponent={<View style={{ height: 20 }} />} // Adds extra space at the end
     />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flexGrow: 1, // Ensures the container can grow and handle scrolling
     backgroundColor: '#F9F9F9',
     paddingHorizontal: 20,
-    paddingTop: 80,
+    paddingTop: 20,
   },
   sectionTitle: {
     fontSize: 22,
