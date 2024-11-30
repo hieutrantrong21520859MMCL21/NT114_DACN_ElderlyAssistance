@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import { TextInput, Text } from "@react-native-material/core";
 import { ScrollView, KeyboardAvoidingView, View, StyleSheet, Image, ImageBackground, Platform, Alert, TouchableOpacity } from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { createUserWithEmailAndPassword } from "firebase/auth"; // Import Firebase auth
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"; // Import updateProfile
 import { auth } from "../firebase"; // Import Firebase config
 
 export default function RegistrationScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState(''); // New state for username
   const [isPasswordSecure, setIsPasswordSecure] = useState(true);
   const [isConfirmPasswordSecure, setIsConfirmPasswordSecure] = useState(true);
   const [iconPassword, setIconPassword] = useState('eye-off');
   const [iconConfirmPassword, setIconConfirmPassword] = useState('eye-off');
-  const [passwordsMatch, setPasswordsMatch] = useState(true); // State to track if passwords match
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
   const checkIsPasswordSecure = () => {
     setIsPasswordSecure(!isPasswordSecure);
@@ -32,23 +33,16 @@ export default function RegistrationScreen({ navigation }) {
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
-        Alert.alert("Registered successfully", `Welcome, ${user.email}!`);
-        navigation.navigate('Login'); // Navigate to Login after successful registration
+        // Update displayName with username
+        await updateProfile(user, { displayName: username });
+        Alert.alert("Registered successfully", `Welcome, ${user.displayName}!`);
+        navigation.navigate('Login');
       })
       .catch(error => {
         Alert.alert("Registration failed", error.message);
       });
-  };
-
-  const handleConfirmPasswordChange = (text) => {
-    setConfirmPassword(text);
-    if (password !== text) {
-      setPasswordsMatch(false);
-    } else {
-      setPasswordsMatch(true);
-    }
   };
 
   return (
@@ -64,9 +58,18 @@ export default function RegistrationScreen({ navigation }) {
         <View style={styles.form}>
           <TextInput
             variant="outlined"
+            label="Username"
+            placeholder="Your Name"
+            onChangeText={setUsername}
+            value={username}
+            style={styles.input}
+          />
+
+          <TextInput
+            variant="outlined"
             label="Email"
             placeholder="abc123@gmail.com"
-            onChangeText={string => setEmail(string)}
+            onChangeText={setEmail}
             value={email}
             style={styles.input}
           />
@@ -77,7 +80,7 @@ export default function RegistrationScreen({ navigation }) {
             placeholder="123"
             secureTextEntry={isPasswordSecure}
             value={password}
-            onChangeText={string => setPassword(string)}
+            onChangeText={setPassword}
             style={styles.input}
             trailing={() => (
               <Icon name={iconPassword} size={24} onPress={checkIsPasswordSecure} />
@@ -90,7 +93,10 @@ export default function RegistrationScreen({ navigation }) {
             placeholder="123"
             secureTextEntry={isConfirmPasswordSecure}
             value={confirmPassword}
-            onChangeText={handleConfirmPasswordChange}
+            onChangeText={(text) => {
+              setConfirmPassword(text);
+              setPasswordsMatch(password === text);
+            }}
             style={styles.input}
             trailing={() => (
               <Icon name={iconConfirmPassword} size={24} onPress={checkIsConfirmPasswordSecure} />
@@ -101,25 +107,12 @@ export default function RegistrationScreen({ navigation }) {
             <Text style={styles.errorText}>Passwords do not match</Text>
           )}
 
-          {/* Custom Register Button using TouchableOpacity */}
           <TouchableOpacity
             style={[styles.form_btn, styles.form_btnRegister]}
             onPress={handleRegister}
-            disabled={!passwordsMatch}
+            disabled={!passwordsMatch || !username}
           >
             <Text style={styles.form_btnText}>Create Account</Text>
-          </TouchableOpacity>
-
-          <View style={styles.lineBreak}>
-            <Text>OR</Text>
-          </View>
-
-          {/* Custom Login Button using TouchableOpacity */}
-          <TouchableOpacity
-            style={[styles.form_btn, styles.form_btnLogin]}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={styles.form_btnText}>Sign In</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

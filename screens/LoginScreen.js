@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Text, TextInput } from '@react-native-material/core';
 import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, Image, ImageBackground, Alert, TouchableOpacity } from 'react-native';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase auth function
-import { auth } from "../firebase"; // Import Firebase config
+import { signInWithEmailAndPassword } from "firebase/auth"; 
+import { auth } from "../firebase"; 
 
 export default function LoginScreen({ navigation }) {
 
@@ -23,14 +23,28 @@ export default function LoginScreen({ navigation }) {
     };
 
     const handleLogin = () => {
+        if (!email || !password) {
+            Alert.alert("Login failed", "Please fill in both email and password.");
+            return;
+        }
+
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 Alert.alert("Login successful", `Welcome back, ${user.email}!`);
-                navigation.navigate('Home'); 
+                navigation.navigate('HomeTabs'); // Chuyển đến màn hình HomeTabs sau khi login thành công
             })
             .catch((error) => {
-                Alert.alert("Login failed", error.message);
+                // Xử lý lỗi login chi tiết hơn
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                if (errorCode === 'auth/wrong-password') {
+                    Alert.alert("Login failed", "Incorrect password. Please try again.");
+                } else if (errorCode === 'auth/user-not-found') {
+                    Alert.alert("Login failed", "User not found. Please check your email or register.");
+                } else {
+                    Alert.alert("Login failed", errorMessage);
+                }
             });
     };
 
@@ -45,13 +59,8 @@ export default function LoginScreen({ navigation }) {
                         style={styles.header_background}
                         source={require('../assets/images/sky_bg.png')}
                     >
-                        <Text
-                            style={styles.header_title}
-                            variant="h3"
-                        >Sign in</Text>
-                        <Image
-                            source={require('../assets/images/logo.png')}
-                        />
+                        <Text style={styles.header_title} variant="h3">Sign in</Text>
+                        <Image source={require('../assets/images/logo.png')} />
                     </ImageBackground>
                 </View>
 
@@ -87,7 +96,6 @@ export default function LoginScreen({ navigation }) {
                         onPress={() => navigation.navigate('ChangePassword')}
                     >Change Password</Text>
 
-                    {/* Custom Login Button using TouchableOpacity */}
                     <TouchableOpacity
                         style={[styles.form_btn, styles.form_btnLogin]}
                         onPress={handleLogin}
@@ -102,9 +110,7 @@ export default function LoginScreen({ navigation }) {
                             onPress={() => navigation.navigate('Registration')}
                         >Here</Text>
                     </View>
-
                 </View>
-
             </ScrollView>
         </KeyboardAvoidingView>
     );
