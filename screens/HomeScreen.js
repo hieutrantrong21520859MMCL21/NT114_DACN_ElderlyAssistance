@@ -40,7 +40,7 @@ export default function HomeScreen({ navigation }) {
           navigation.navigate('Exercise');
           break;
         case 'News':
-          alert('News screen not implemented yet');
+          navigation.navigate('News')
           break;
         case 'Music':
           navigation.navigate('Music');

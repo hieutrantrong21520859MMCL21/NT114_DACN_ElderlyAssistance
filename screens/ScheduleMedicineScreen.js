@@ -21,6 +21,8 @@ export default function ScheduleMedicineScreen() {
   const navigation = useNavigation();
   const route = useRoute();
 
+  console.log(route.params);
+
   useEffect(() => {
     // Load saved medicines from AsyncStorage
     const loadMedicines = async () => {

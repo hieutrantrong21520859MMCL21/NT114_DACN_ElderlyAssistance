@@ -19,6 +19,7 @@ import ExerciseDetailScreen from './screens/ExerciseDetailScreen';
 import AudioBookScreen from './screens/AudioBookScreen';
 import MusicScreen from './screens/MusicScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
+import NewsScreen from './screens/NewsScreen';
 
 // Create the Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -64,6 +65,7 @@ export default function App() {
         <Stack.Screen name="AudioBook" component={AudioBookScreen} />
         <Stack.Screen name="Music" component={MusicScreen} />
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+        <Stack.Screen name="News" component={NewsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
