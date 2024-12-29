@@ -5,7 +5,7 @@ import SchedulingStack from "./medical_activities/scheduling/SchedulingStack";
 import ExercisingStack from "./medical_activities/exercises/ExercisingStack";
 import NewsStack from "./entertainment/news/NewsStack";
 import AudioScreen from "../../screens/main/entertainment/audio/AudioScreen";
-import ChatbotScreen from "../../screens/ChatbotScreen";
+import ChatbotScreen from "../../screens/main/assistance/chatbot/ChatbotScreen";
 import EmergencyCallScreen from "../../screens/main/assistance/emergency_call/EmergencyCallScreen";
 import SupportCallScreen from "../../screens/main/assistance/support_call/SupportCallScreen";
 

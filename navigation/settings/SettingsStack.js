@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import SettingsScreen from "../../screens/settings/SettingsScreen";
 import ChangingPasswordScreen from "../../screens/settings/ChangingPasswordScreen";
+import EditingProfileScreen from "../../screens/settings/EditingProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,10 @@ const SettingsStack = () => {
                 options={{
                     title: 'Change password'
                 }}
+            />
+            <Stack.Screen
+                name="Editing"
+                component={EditingProfileScreen}
             />
         </Stack.Navigator>
     );

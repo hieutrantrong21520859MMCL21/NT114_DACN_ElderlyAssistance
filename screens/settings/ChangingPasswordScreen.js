@@ -1,9 +1,20 @@
-import React, { useContext, useState } from "react";
-import { Text, TextInput, Button } from '@react-native-material/core';
-import { Alert } from 'react-native';
-import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, Image, ImageBackground } from 'react-native';
+import { useContext, useState } from "react";
+
+import {
+    StyleSheet,
+    ScrollView,
+    View,
+    KeyboardAvoidingView,
+    Platform,
+    Image,
+    ImageBackground,
+    TouchableOpacity,
+    Alert
+} from 'react-native';
+
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { AuthContext } from "../../contexts/AuthContext";
+import { Text, TextInput } from '@react-native-material/core';
 
 const ChangingPasswordScreen = ({ navigation }) => {
     const context = useContext(AuthContext);
@@ -32,10 +43,7 @@ const ChangingPasswordScreen = ({ navigation }) => {
                 updatePassword(credential, newPassword)
                     .then(() => {
                         Alert.alert("Success", "Password has been changed successfully.");
-                        context.method.setUser({
-                            ...context.data.user,
-                            password: newPassword
-                        });
+                        context.method.setUser({});
                     })
                     .catch((error) => {
                         Alert.alert("Error", error.message);
@@ -57,10 +65,6 @@ const ChangingPasswordScreen = ({ navigation }) => {
                         style={styles.header_background}
                         source={require('../../assets/images/sky_bg.png')}
                     >
-                        <Text
-                            style={styles.header_title}
-                            variant="h3"
-                        >Change Password</Text>
                         <Image
                             source={require('../../assets/images/logo.png')}
                         />
@@ -97,11 +101,12 @@ const ChangingPasswordScreen = ({ navigation }) => {
                         value={confirmNewPassword}
                         onChangeText={setConfirmNewPassword}
                     /> */}
-                    <Button
-                        style={styles.form_btnChangePassword}
-                        title="Change Password"
+                    <TouchableOpacity
+                        style={[styles.form_btn, styles.form_btnChangePassword]}
                         onPress={handleChangePassword}
-                    />
+                    >
+                        <Text style={styles.form_btnText}>Change Password</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -141,11 +146,26 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         rowGap: 16,
     },
-    form_btnChangePassword: {
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        backgroundColor: '#0096FF',
+    input: {
+        width: '100%',
+        marginBottom: 16,
     },
+    form_btn: {
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    form_btnChangePassword: {
+        backgroundColor: '#0096FF',
+        marginTop: 16,
+    },
+    form_btnText: {
+        fontSize: 24,
+        color: '#fff',
+        fontWeight: 'bold',
+    }
 });
 
 export default ChangingPasswordScreen;

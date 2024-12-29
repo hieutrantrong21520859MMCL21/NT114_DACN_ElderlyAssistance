@@ -1,6 +1,6 @@
 export default chatbot_dataset = [
   {
-    intent: 'greetings_and_small_talk',
+    scenario: 'greetings_and_small_talk',
     conversations: [
       {
         user_inputs: ["Hello", "Hi", "Good morning", "Hey there"],
@@ -80,15 +80,6 @@ export default chatbot_dataset = [
           "Goodbye! Take care, and I'll be here if you need me again.",
           "Good night! Sleep well and talk to you soon."
         ]
-      }
-    ]
-  },
-  {
-    intent: '',
-    conversations: [
-      {
-        user_inputs: [''],
-        responses: ['']
       }
     ]
   }
